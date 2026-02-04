@@ -682,71 +682,6 @@
       opacity: 0.8;
     }
 
-    /* Page Loader */
-    .page-loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #000000;
-      z-index: 10000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      animation: fadeOut 0.4s ease 1.1s forwards;
-    }
-
-    @keyframes fadeOut {
-      to { opacity: 0; pointer-events: none; }
-    }
-
-    .loader-content {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 40px;
-    }
-
-    .loader-square {
-      position: relative;
-      width: 80px;
-      height: 80px;
-      border: 3px solid #ffffff;
-      animation: squareRotate 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    }
-
-    .loader-square::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #ffffff;
-      transform-origin: top;
-      animation: squareFill 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    }
-
-    @keyframes squareRotate {
-      0%, 100% { transform: rotate(0deg); }
-      50% { transform: rotate(180deg); }
-    }
-
-    @keyframes squareFill {
-      0% { transform: scaleY(0); }
-      50% { transform: scaleY(1); }
-      100% { transform: scaleY(0); }
-    }
-
-    .loader-void {
-      font-size: 48px;
-      font-weight: 900;
-      letter-spacing: 8px;
-      color: #ffffff;
-    }
-
     /* Mobile Responsive */
     @media (max-width: 768px) {
       .container { padding: 0 16px; }
@@ -795,13 +730,6 @@
   </style>
 </head>
 <body>
-  <!-- Page Loader -->
-  <div class="page-loader">
-    <div class="loader-content">
-      <div class="loader-square"></div>
-      <div class="loader-void">VOID</div>
-    </div>
-  </div>
 
   <div class="container">
     <!-- Navigation -->
