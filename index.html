@@ -98,8 +98,8 @@
   pointer-events: none;
   background: radial-gradient(
     circle,
-    rgba(235, 115, 10, 0.25),
-    rgba(235, 115, 10, 0.15),
+    rgba(255, 255, 255, 0.25),
+    rgba(252, 252, 252, 0.15),
     transparent 60%
   );
   transform: translate(-50%, -50%);
@@ -323,6 +323,8 @@
     }
 
     .cta h2 {
+      background: none !important;
+      box-shadow: none;
       font-size: 120px;
       font-weight: 900;
       line-height: 0.9;
@@ -334,6 +336,12 @@
     .cta h2:hover {
       color: transparent;
       -webkit-text-stroke: 1px var(--text);
+    }
+
+    .cta h2::before,
+    .cta h2::after {
+      display: none !important;
+      content: none;
     }
 
     .footer-bottom {
