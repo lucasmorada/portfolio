@@ -762,6 +762,68 @@
       .cta h2 { font-size: 36px; }
       .modal-title { font-size: 28px; }
     }
+
+    
+#main-nav {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: transparent;
+  transition: all 0.5s var(--transition);
+}
+
+
+#main-nav.floating {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+  height: 64px;
+  padding: 0 32px;
+  border-radius: 999px;
+
+  background: rgba(20, 20, 20, 0.55);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+
+.light-mode #main-nav.floating {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+
+#main-nav.floating .nav-links {
+  gap: 24px;
+}
+
+
+#main-nav.floating .controls {
+  border-left: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+
+#main-nav.floating .nav-links a {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+}
+
+
+#main-nav.floating .logo {
+  font-size: 18px;
+}
+
   </style>
 </head>
 <body>
@@ -783,6 +845,8 @@
         </div>
       </div>
     </nav>
+
+    <nav id="main-nav">
 
     <!-- HOME PAGE -->
     <div class="page active" id="page-home">
@@ -1309,6 +1373,26 @@ document.addEventListener('mousemove', (e) => {
   cursorLight.style.left = `${e.clientX}px`;
   cursorLight.style.top = `${e.clientY}px`;
 });
+
+let lastScroll = 0;
+const nav = document.getElementById('main-nav');
+
+window.addEventListener('scroll', () => {
+  const currentScroll = window.scrollY;
+
+  // Scroll pra baixo → vira Dynamic Island
+  if (currentScroll > lastScroll && currentScroll > 120) {
+    nav.classList.add('floating');
+  }
+
+  // Scroll pra cima → volta navbar normal
+  if (currentScroll < lastScroll && currentScroll < 200) {
+    nav.classList.remove('floating');
+  }
+
+  lastScroll = currentScroll;
+});
+
 
   </script>
 </body>
