@@ -781,42 +781,40 @@
       .modal-title { font-size: 28px; }
     }
 
-    
 #main-nav {
   position: sticky;
   top: 0;
   z-index: 999;
+  width: 100%;
   background: transparent;
-  transition: all 0.5s var(--transition);
+  transition: all 0.45s var(--transition);
 }
 
+.nav-inner {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-#main-nav.floating {
+#main-nav.island {
   position: fixed;
   top: 16px;
   left: 50%;
   transform: translateX(-50%);
   width: fit-content;
+}
+
+#main-nav.island .nav-inner {
   height: 64px;
   padding: 0 32px;
-  border-radius: 999px;
+  gap: 32px;
 
   background: rgba(20, 20, 20, 0.55);
   backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-
+  border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-
-  display: flex;
-  align-items: center;
-  gap: 32px;
-}
-
-
-.light-mode #main-nav.floating {
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
   </style>
@@ -825,21 +823,24 @@
 
   <div class="cursor-light"></div>
 
-  <div class="container">
-    <!-- Navigation -->
-    <nav id="main-nav">
-      <div class="logo">logo</div>
-      <div class="nav-links">
+      <nav id="main-nav">
+  <div class="container nav-inner">
+    <div class="logo">logo</div>
+
+    <div class="nav-links">
         <a onclick="showPage('home')" id="nav-home" class="active" data-en="Home" data-pt="Inicio">HOME</a>
         <a onclick="showPage('works')" id="nav-works" data-en="Works" data-pt="Trabalhos">WORK</a>
         <a onclick="showPage('journal')" id="nav-journal" data-en="WORKFLOW" data-pt="PROCESSO">WORKFLOW</a>
         <a onclick="showPage('contact')" id="nav-contact" data-en="Contact" data-pt="Contato">CONTACT</a>
-        <div class="controls">
-          <button class="control-btn" onclick="toggleTheme()" id="theme-btn">Light</button>
-          <button class="control-btn" onclick="toggleLanguage()" id="lang-btn">PT</button>
-        </div>
+
+      <div class="controls">
+        <button class="control-btn" onclick="toggleTheme()">Light</button>
+        <button class="control-btn" onclick="toggleLanguage()">PT</button>
       </div>
-    </nav>
+    </div>
+  </div>
+</nav>
+
 
     <!-- HOME PAGE -->
     <div class="page active" id="page-home">
@@ -1367,33 +1368,23 @@ document.addEventListener('mousemove', (e) => {
   cursorLight.style.top = `${e.clientY}px`;
 });
 
-let lastScrollY = window.scrollY;
-  const nav = document.getElementById("main-nav");
+const nav = document.getElementById("main-nav");
+  let lastScroll = window.scrollY;
 
   window.addEventListener("scroll", () => {
-    const currentScrollY = window.scrollY;
+    const current = window.scrollY;
 
-    // ativa modo floating depois de um pouco de scroll
-    if (currentScrollY > 100) {
-      nav.classList.add("floating");
+    if (current > lastScroll && current > 120) {
+      // descendo → dynamic island
+      nav.classList.add("island");
     } else {
-      nav.classList.remove("floating");
+      // subindo → navbar normal
+      nav.classList.remove("island");
     }
 
-    // scroll pra baixo = some
-    if (currentScrollY > lastScrollY && currentScrollY > 200) {
-      nav.style.transform = "translate(-50%, -120%)";
-      nav.style.opacity = "0";
-    } 
-    // scroll pra cima = aparece
-    else {
-      nav.style.transform = "translate(-50%, 0)";
-      nav.style.opacity = "1";
-    }
-
-    lastScrollY = currentScrollY;
+    lastScroll = current;
   });
-  
+
   </script>
 </body>
 </html>
