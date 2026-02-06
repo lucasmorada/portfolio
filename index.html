@@ -827,7 +827,7 @@
 
   <div class="container">
     <!-- Navigation -->
-    <nav>
+    <nav id="main-nav">
       <div class="logo">logo</div>
       <div class="nav-links">
         <a onclick="showPage('home')" id="nav-home" class="active" data-en="Home" data-pt="Inicio">HOME</a>
@@ -1366,6 +1366,34 @@ document.addEventListener('mousemove', (e) => {
   cursorLight.style.left = `${e.clientX}px`;
   cursorLight.style.top = `${e.clientY}px`;
 });
+
+let lastScrollY = window.scrollY;
+  const nav = document.getElementById("main-nav");
+
+  window.addEventListener("scroll", () => {
+    const currentScrollY = window.scrollY;
+
+    // ativa modo floating depois de um pouco de scroll
+    if (currentScrollY > 100) {
+      nav.classList.add("floating");
+    } else {
+      nav.classList.remove("floating");
+    }
+
+    // scroll pra baixo = some
+    if (currentScrollY > lastScrollY && currentScrollY > 200) {
+      nav.style.transform = "translate(-50%, -120%)";
+      nav.style.opacity = "0";
+    } 
+    // scroll pra cima = aparece
+    else {
+      nav.style.transform = "translate(-50%, 0)";
+      nav.style.opacity = "1";
+    }
+
+    lastScrollY = currentScrollY;
+  });
+  
   </script>
 </body>
 </html>
