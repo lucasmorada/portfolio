@@ -379,8 +379,8 @@
       justify-content: space-between;
       padding-top: 40px;
       border-top: 1px solid var(--accent);
-      font-size: 12px;
-      color: var(--gray-darker);
+      font-size: 20px;
+      color: #ffffff;
       text-transform: uppercase;
       letter-spacing: 2px;
     }
@@ -1332,21 +1332,6 @@
       document.getElementById('theme-btn').textContent = isLightMode ? (currentLang === 'en' ? 'Dark' : 'Escuro') : (currentLang === 'en' ? 'Light' : 'Claro');
     }
 
-    // Toggle Language
-    function toggleLanguage() {
-      currentLang = currentLang === 'en' ? 'pt' : 'en';
-      document.getElementById('lang-btn').textContent = currentLang === 'en' ? 'PT' : 'EN';
-      document.getElementById('theme-btn').textContent = isLightMode ? (currentLang === 'en' ? 'Dark' : 'Escuro') : (currentLang === 'en' ? 'Light' : 'Claro');
-      
-      // Update all translatable elements
-      document.querySelectorAll('[data-en]').forEach(el => {
-        const text = el.getAttribute(`data-${currentLang}`);
-        if (text) {
-          el.innerHTML = text;
-        }
-      });
-    }
-
     // Show Page
     function showPage(pageId) {
       document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -1391,6 +1376,22 @@ document.addEventListener('mousemove', (e) => {
   cursorLight.style.left = `${e.clientX}px`;
   cursorLight.style.top = `${e.clientY}px`;
 });
+
+function toggleLanguage() {
+  currentLang = currentLang === 'en' ? 'pt' : 'en';
+
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const text = el.getAttribute(`data-${currentLang}`);
+    if (text) {
+      el.innerHTML = text; // IMPORTANTE: innerHTML por causa do <br>
+    }
+  });
+
+  // Atualiza texto do botão
+  const langBtn = document.querySelector('.controls .control-btn:last-child');
+  langBtn.textContent = currentLang === 'en' ? 'PT' : 'EN';
+}
+
 
 const nav = document.getElementById("main-nav");
   let lastScroll = window.scrollY;
