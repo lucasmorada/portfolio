@@ -65,11 +65,51 @@
       z-index: 9999;
     }
 
+    body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(
+      1200px circle at 20% 10%,
+      rgba(235, 115, 10, 0.12),
+      transparent 40%
+    ),
+    radial-gradient(
+      800px circle at 80% 90%,
+      rgba(255, 255, 255, 0.05),
+      transparent 40%
+    );
+  pointer-events: none;
+  z-index: -1;
+}
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
     }
+
+    .cursor-light {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 600px;
+  height: 600px;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(235, 115, 10, 0.15),
+    transparent 60%
+  );
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  mix-blend-mode: screen;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+}
 
     /* Navigation */
     nav {
@@ -731,6 +771,8 @@
 </head>
 <body>
 
+  <div class="cursor-light"></div>
+
   <div class="container">
     <!-- Navigation -->
     <nav>
@@ -1265,6 +1307,14 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
+
+    const cursorLight = document.querySelector('.cursor-light');
+
+document.addEventListener('mousemove', (e) => {
+  cursorLight.style.left = `${e.clientX}px`;
+  cursorLight.style.top = `${e.clientY}px`;
+});
+
   </script>
 </body>
 </html>
