@@ -173,6 +173,94 @@
       opacity: 0.5;
     }
 
+
+
+/* HAMBURGER */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 22px;
+  position: relative;
+  z-index: 10001;
+}
+
+.menu-toggle span {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: var(--text);
+  left: 0;
+  transition: all 0.4s var(--transition);
+}
+
+.menu-toggle span:nth-child(1) { top: 0; }
+.menu-toggle span:nth-child(2) { top: 10px; }
+.menu-toggle span:nth-child(3) { bottom: 0; }
+
+/* X animation */
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg);
+  top: 10px;
+}
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg);
+  bottom: 10px;
+}
+
+/* MOBILE MENU */
+.nav-menu {
+  display: flex;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-menu {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-100%);
+    transition: transform 0.6s var(--transition);
+    z-index: 10000;
+  }
+
+  .nav-menu.active {
+    transform: translateY(0);
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 32px;
+    text-align: center;
+  }
+
+  .nav-links a {
+    font-size: 20px;
+    letter-spacing: 3px;
+  }
+
+  .controls {
+    flex-direction: column;
+    border: none;
+    padding: 0;
+    margin-top: 40px;
+  }
+}
+
+
+
     /* Controls */
     .controls {
       display: flex;
@@ -847,24 +935,31 @@
 
   <div class="cursor-light"></div>
 
-      <nav id="main-nav">
+<nav id="main-nav">
   <div class="container nav-inner">
     <div class="logo">logo</div>
 
-    <div class="nav-links">
-        <a onclick="showPage('home')" id="nav-home" class="active" data-en="Home" data-pt="Inicio">HOME</a>
-        <a onclick="showPage('works')" id="nav-works" data-en="Works" data-pt="Trabalhos">WORK</a>
-        <a onclick="showPage('journal')" id="nav-journal" data-en="WORKFLOW" data-pt="PROCESSO">WORKFLOW</a>
-        <a onclick="showPage('contact')" id="nav-contact" data-en="Contact" data-pt="Contato">CONTACT</a>
+    <button class="menu-toggle" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
-      <div class="controls">
-        <button class="control-btn" onclick="toggleTheme()">Light</button>
-        <button class="control-btn" onclick="toggleLanguage()">PT</button>
+    <div class="nav-menu">
+      <div class="nav-links">
+        <a onclick="showPage('home')" class="active">HOME</a>
+        <a onclick="showPage('works')">WORK</a>
+        <a onclick="showPage('journal')">WORKFLOW</a>
+        <a onclick="showPage('contact')">CONTACT</a>
+
+        <div class="controls">
+          <button class="control-btn" onclick="toggleTheme()">Light</button>
+          <button class="control-btn" onclick="toggleLanguage()">PT</button>
+        </div>
       </div>
     </div>
   </div>
 </nav>
-
 
     <!-- HOME PAGE -->
     <div class="page active" id="page-home">
@@ -1409,6 +1504,24 @@ const nav = document.getElementById("main-nav");
 
     lastScroll = current;
   });
+
+
+  const menuToggle = document.querySelector('.menu-toggle');
+const navMenu = document.querySelector('.nav-menu');
+
+menuToggle.addEventListener('click', () => {
+  menuToggle.classList.toggle('active');
+  navMenu.classList.toggle('active');
+});
+
+// Fecha o menu ao clicar em um link
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    menuToggle.classList.remove('active');
+    navMenu.classList.remove('active');
+  });
+});
+
 
   </script>
 </body>
