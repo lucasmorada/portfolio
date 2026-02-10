@@ -930,6 +930,12 @@
 }
 
 @media (max-width: 768px) {
+  .hero {
+    padding-top: 60px;
+  }
+}
+
+@media (max-width: 768px) {
   .menu-toggle {
     position: relative;
     right: -10px; /* ajusta fino aqui */
@@ -982,8 +988,22 @@
   }
 }
 
-#main-nav.island .nav-menu {
-  display: none;
+@media (max-width: 768px) {
+  .controls {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  nav {
+    border-bottom: none;
+  }
+}
+
+@media (min-width: 769px) {
+  #main-nav.island .nav-menu {
+    display: none;
+  }
 }
 
 #main-nav.island {
