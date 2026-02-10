@@ -700,7 +700,7 @@
       height: 100vh;
       background: rgba(0, 0, 0, 0.95);
       backdrop-filter: blur(10px);
-      z-index: 9998;
+      z-index: 9999;
       display: none;
       justify-content: center;
       align-items: center;
@@ -910,11 +910,12 @@
 }
 
 #main-nav.island {
-  position: fixed;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: fit-content;
+  left: 16px;
+  right: 16px;
+  transform: none;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
 }
 
 #main-nav.island .nav-inner {
@@ -938,7 +939,7 @@
 @media (max-width: 768px) {
   .menu-toggle {
     position: relative;
-    right: -10px; /* ajusta fino aqui */
+    right: -10px; 
   }
 }
 
@@ -1573,41 +1574,50 @@ function toggleLanguage() {
   langBtn.textContent = currentLang === 'en' ? 'PT' : 'EN';
 }
 
-
-const nav = document.getElementById("main-nav");
-  let lastScroll = window.scrollY;
-
-  window.addEventListener("scroll", () => {
-    const current = window.scrollY;
-
-    if (current > lastScroll && current > 120) {
-      // descendo → dynamic island
-      nav.classList.add("island");
-    } else {
-      // subindo → navbar normal
-      nav.classList.remove("island");
-    }
-
-    lastScroll = current;
-  });
-
-
+  const nav = document.getElementById('main-nav');
   const menuToggle = document.querySelector('.menu-toggle');
-const navMenu = document.querySelector('.nav-menu');
+  const navMenu = document.querySelector('.nav-menu');
 
-menuToggle.addEventListener('click', () => {
-  menuToggle.classList.toggle('active');
-  navMenu.classList.toggle('active');
-});
+  let lastScrollY = window.scrollY;
+  let menuOpen = false;
 
-// Fecha o menu ao clicar em um link
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => {
-    menuToggle.classList.remove('active');
-    navMenu.classList.remove('active');
+  /* ===== MENU MOBILE ===== */
+  menuToggle.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+
+    menuToggle.classList.toggle('active');
+    navMenu.classList.toggle('active');
+
+    if (menuOpen) {
+      nav.classList.remove('island');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
   });
-});
 
+  /* ===== SCROLL → DYNAMIC ISLAND ===== */
+  window.addEventListener('scroll', () => {
+    if (menuOpen) return; // se menu aberto, ignora scroll
+
+    if (window.scrollY > 120) {
+      nav.classList.add('island');
+    } else {
+      nav.classList.remove('island');
+    }
+  });
+
+  /* ===== FECHAR MENU AO CLICAR EM LINK ===== */
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (!menuOpen) return;
+
+      menuOpen = false;
+      menuToggle.classList.remove('active');
+      navMenu.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
 
   </script>
 </body>
