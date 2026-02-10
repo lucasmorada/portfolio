@@ -931,12 +931,17 @@
 
 @media (max-width: 768px) {
   .menu-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 10002;
+    position: relative;
+    right: -10px; /* ajusta fino aqui */
   }
 }
+
+@media (max-width: 768px) {
+  #main-nav.island + .page {
+    margin-top: 100px;
+  }
+}
+
 
 @media (max-width: 768px) {
   #main-nav.island .controls {
@@ -951,6 +956,29 @@
 @media (max-width: 768px) {
   .controls {
     border-left: none;
+  }
+}
+
+@media (max-width: 768px) {
+  #main-nav.island .nav-inner {
+    padding: 0 20px;
+    height: 56px;
+    background: rgba(20, 20, 20, 0.35);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links a {
+    font-size: 24px;
+  }
+
+  .controls {
+    gap: 16px;
+  }
+
+  .control-btn {
+    font-size: 14px;
+    padding: 12px 24px;
   }
 }
 
