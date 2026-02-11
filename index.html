@@ -1114,8 +1114,8 @@
 
     <!-- CONTROLS DESKTOP -->
     <div class="controls desktop-controls">
-      <button class="control-btn" onclick="toggleTheme()">Light</button>
-      <button class="control-btn" onclick="toggleLanguage()">PT</button>
+      <button data-theme-btn onclick="toggleTheme()">Light</button>
+      <button data-lang-btn onclick="toggleLanguage()">PT</button>
     </div>
   </div>
 
@@ -1130,8 +1130,8 @@
 
     <!-- CONTROLS MOBILE -->
     <div class="controls mobile-controls">
-      <button class="control-btn" onclick="toggleTheme()">Light</button>
-      <button class="control-btn" onclick="toggleLanguage()">PT</button>
+      <button data-theme-btn onclick="toggleTheme()">Light</button>
+      <button data-lang-btn onclick="toggleLanguage()">PT</button>
     </div>
   </div>
 </nav>
@@ -1592,120 +1592,156 @@
       ]
     };
 
-    let currentLang = 'en';
-    let isLightMode = false;
+    /* =====================
+   ESTADOS GLOBAIS
+===================== */
+let currentLang = 'en';
+let isLightMode = false;
+let menuOpen = false;
+let lastScrollY = window.scrollY;
 
-    // Toggle Theme
-    function toggleTheme() {
-      isLightMode = !isLightMode;
-      document.body.classList.toggle('light-mode', isLightMode);
-      document.getElementById('theme-btn').textContent = isLightMode ? (currentLang === 'en' ? 'Dark' : 'Escuro') : (currentLang === 'en' ? 'Light' : 'Claro');
-    }
-
-    // Show Page
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-      document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
-      
-      document.getElementById(`page-${pageId}`).classList.add('active');
-      document.getElementById(`nav-${pageId}`).classList.add('active');
-      
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Modal Functions
-    function openModal(index) {
-      const service = servicesData[currentLang][index];
-      document.getElementById('modal-number').textContent = service.number;
-      document.getElementById('modal-title').textContent = service.title;
-      document.getElementById('modal-description').textContent = service.description;
-      
-      const list = document.getElementById('modal-list');
-      list.innerHTML = service.details.map(detail => 
-        `<li><span class="detail-marker">→</span>${detail}</li>`
-      ).join('');
-      
-      document.getElementById('modal-overlay').classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal(event) {
-      if (event && event.target !== event.currentTarget) return;
-      document.getElementById('modal-overlay').classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
-
-    const cursorLight = document.querySelector('.cursor-light');
-
-document.addEventListener('mousemove', (e) => {
-  cursorLight.style.left = `${e.clientX}px`;
-  cursorLight.style.top = `${e.clientY}px`;
-});
-
-function toggleLanguage() {
-  currentLang = currentLang === 'en' ? 'pt' : 'en';
-
-  document.querySelectorAll('[data-en]').forEach(el => {
-    const text = el.getAttribute(`data-${currentLang}`);
-    if (text) {
-      el.innerHTML = text; // IMPORTANTE: innerHTML por causa do <br>
-    }
-  });
-
-  // Atualiza texto do botão
-  const langBtn = document.querySelector('.controls .control-btn:last-child');
-  langBtn.textContent = currentLang === 'en' ? 'PT' : 'EN';
+/* =====================
+   THEME
+===================== */
+function toggleTheme() {
+  isLightMode = !isLightMode;
+  document.body.classList.toggle('light-mode', isLightMode);
+  updateControlButtons();
 }
 
-  const nav = document.getElementById('main-nav');
-  const menuToggle = document.querySelector('.menu-toggle');
-  const navMenu = document.querySelector('.nav-menu');
+/* =====================
+   PAGE NAVIGATION
+===================== */
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(page =>
+    page.classList.remove('active')
+  );
 
-  let lastScrollY = window.scrollY;
-  let menuOpen = false;
+  document.querySelectorAll('.nav-links a').forEach(link =>
+    link.classList.remove('active')
+  );
 
-  /* ===== MENU MOBILE ===== */
-  menuToggle.addEventListener('click', () => {
-    menuOpen = !menuOpen;
+  const page = document.getElementById(`page-${pageId}`);
+  const navLink = document.getElementById(`nav-${pageId}`);
 
-    menuToggle.classList.toggle('active');
-    navMenu.classList.toggle('active');
+  if (page) page.classList.add('active');
+  if (navLink) navLink.classList.add('active');
 
-    if (menuOpen) {
-      nav.classList.remove('island');
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Fecha menu mobile ao navegar
+  closeMobileMenu();
+}
+
+/* =====================
+   MODAL
+===================== */
+function openModal(index) {
+  const service = servicesData?.[currentLang]?.[index];
+  if (!service) return;
+
+  document.getElementById('modal-number').textContent = service.number;
+  document.getElementById('modal-title').textContent = service.title;
+  document.getElementById('modal-description').textContent = service.description;
+
+  const list = document.getElementById('modal-list');
+  list.innerHTML = service.details
+    .map(detail => `<li><span class="detail-marker">→</span>${detail}</li>`)
+    .join('');
+
+  document.getElementById('modal-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('modal-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* =====================
+   CURSOR LIGHT
+===================== */
+const cursorLight = document.querySelector('.cursor-light');
+
+if (cursorLight) {
+  document.addEventListener('mousemove', e => {
+    cursorLight.style.left = `${e.clientX}px`;
+    cursorLight.style.top = `${e.clientY}px`;
+  });
+}
+
+/* =====================
+   CONTROLS (LANG + THEME)
+===================== */
+function updateControlButtons() {
+  // Tema
+  document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+    btn.textContent = isLightMode
+      ? currentLang === 'en' ? 'Dark' : 'Escuro'
+      : currentLang === 'en' ? 'Light' : 'Claro';
   });
 
-  /* ===== SCROLL → DYNAMIC ISLAND ===== */
-  window.addEventListener('scroll', () => {
-    if (menuOpen) return; // se menu aberto, ignora scroll
-
-    if (window.scrollY > 120) {
-      nav.classList.add('island');
-    } else {
-      nav.classList.remove('island');
-    }
+  // Idioma
+  document.querySelectorAll('[data-lang-btn]').forEach(btn => {
+    btn.textContent = currentLang === 'en' ? 'PT' : 'EN';
   });
+}
 
-  /* ===== FECHAR MENU AO CLICAR EM LINK ===== */
-  document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-      if (!menuOpen) return;
+/* =====================
+   NAV / DYNAMIC ISLAND
+===================== */
+const nav = document.getElementById('main-nav');
+const menuToggle = document.querySelector('.menu-toggle');
+const navMenu = document.querySelector('.nav-menu');
 
-      menuOpen = false;
-      menuToggle.classList.remove('active');
-      navMenu.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-  });
+/* MENU MOBILE */
+function closeMobileMenu() {
+  menuOpen = false;
+  menuToggle?.classList.remove('active');
+  navMenu?.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+menuToggle?.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+
+  menuToggle.classList.toggle('active', menuOpen);
+  navMenu.classList.toggle('active', menuOpen);
+
+  if (menuOpen) {
+    nav.classList.remove('island');
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+});
+
+/* SCROLL → DYNAMIC ISLAND */
+window.addEventListener('scroll', () => {
+  if (menuOpen) return;
+
+  if (window.scrollY > 120) {
+    nav.classList.add('island');
+  } else {
+    nav.classList.remove('island');
+  }
+});
+
+/* FECHAR MENU AO CLICAR EM LINK */
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', closeMobileMenu);
+});
+
+/* =====================
+   INIT
+===================== */
+updateControlButtons();
+
 
   </script>
 </body>
