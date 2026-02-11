@@ -982,6 +982,12 @@
   }
 }
 
+@media (max-width: 768px) {
+  .nav-menu {
+    flex-direction: column;
+  }
+}
+
 @media (min-width: 769px) {
   #main-nav.island .nav-menu {
     display: none;
@@ -1003,14 +1009,15 @@
     z-index: 10001;
   }
 
+  @media (max-width: 768px) {
   .nav-menu {
     position: fixed;
     inset: 0;
     background: var(--bg);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-
     opacity: 0;
     pointer-events: none;
     transform: translateY(-100%);
@@ -1023,6 +1030,7 @@
     pointer-events: all;
     transform: translateY(0);
   }
+}
 
   .nav-links {
     display: flex;
@@ -1064,6 +1072,22 @@
   }
 }
 
+.desktop-links {
+  display: flex;
+  gap: 40px;
+}
+
+@media (max-width: 768px) {
+  .desktop-links {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .nav-menu {
+    display: none;
+  }
+}
 
   </style>
 </head>
@@ -1078,6 +1102,15 @@
     <button class="menu-toggle" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
+
+    <!-- DESKTOP -->
+<div class="nav-links desktop-links">
+  <a onclick="showPage('home')">HOME</a>
+  <a onclick="showPage('works')">WORK</a>
+  <a onclick="showPage('journal')">WORKFLOW</a>
+  <a onclick="showPage('contact')">CONTACT</a>
+</div>
+
 
     <!-- CONTROLS DESKTOP -->
     <div class="controls desktop-controls">
