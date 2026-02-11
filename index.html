@@ -1107,6 +1107,14 @@
   opacity: 0.6;
 }
 
+@media (max-width: 768px) {
+  .nav-menu.active ~ .nav-inner .menu-toggle,
+  .menu-toggle.active {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 
   </style>
 </head>
