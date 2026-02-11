@@ -949,21 +949,8 @@
   }
 }
 
-
-@media (max-width: 768px) {
-  #main-nav.island .controls {
-    display: none;
-  }
-}
-
 #main-nav.island {
   border-bottom: none;
-}
-
-@media (max-width: 768px) {
-  .controls {
-    border-left: none;
-  }
 }
 
 @media (max-width: 768px) {
@@ -986,12 +973,6 @@
   .control-btn {
     font-size: 14px;
     padding: 12px 24px;
-  }
-}
-
-@media (max-width: 768px) {
-  .controls {
-    display: none !important;
   }
 }
 
@@ -1060,6 +1041,29 @@
   }
 }
 
+/* Desktop */
+.desktop-controls {
+  display: flex;
+}
+
+/* Mobile */
+.mobile-controls {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-controls {
+    display: none;
+  }
+
+  .nav-menu.active .mobile-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 40px;
+  }
+}
+
 
   </style>
 </head>
@@ -1072,23 +1076,29 @@
     <div class="logo">logo</div>
 
     <button class="menu-toggle" aria-label="Open menu">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
 
-    <div class="nav-menu">
-      <div class="nav-links">
-        <a onclick="showPage('home')" class="active">HOME</a>
-        <a onclick="showPage('works')">WORK</a>
-        <a onclick="showPage('journal')">WORKFLOW</a>
-        <a onclick="showPage('contact')">CONTACT</a>
+    <!-- CONTROLS DESKTOP -->
+    <div class="controls desktop-controls">
+      <button class="control-btn" onclick="toggleTheme()">Light</button>
+      <button class="control-btn" onclick="toggleLanguage()">PT</button>
+    </div>
+  </div>
 
-        <div class="controls">
-          <button class="control-btn" onclick="toggleTheme()">Light</button>
-          <button class="control-btn" onclick="toggleLanguage()">PT</button>
-        </div>
-      </div>
+  <!-- MENU MOBILE -->
+  <div class="nav-menu">
+    <div class="nav-links">
+      <a onclick="showPage('home')">HOME</a>
+      <a onclick="showPage('works')">WORK</a>
+      <a onclick="showPage('journal')">WORKFLOW</a>
+      <a onclick="showPage('contact')">CONTACT</a>
+    </div>
+
+    <!-- CONTROLS MOBILE -->
+    <div class="controls mobile-controls">
+      <button class="control-btn" onclick="toggleTheme()">Light</button>
+      <button class="control-btn" onclick="toggleLanguage()">PT</button>
     </div>
   </div>
 </nav>
