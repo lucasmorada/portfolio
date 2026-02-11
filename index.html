@@ -1114,8 +1114,9 @@
 
     <!-- CONTROLS DESKTOP -->
     <div class="controls desktop-controls">
-      <button class="control-btn" onclick="toggleTheme()">Light</button>
-      <button class="control-btn" onclick="toggleLanguage()">PT</button>
+      <button id="theme-btn" class="control-btn" onclick="toggleTheme()">Light</button>
+<button id="lang-btn" class="control-btn" onclick="toggleLanguage()">PT</button>
+
     </div>
   </div>
 
@@ -1130,8 +1131,9 @@
 
     <!-- CONTROLS MOBILE -->
     <div class="controls mobile-controls">
-      <button class="control-btn" onclick="toggleTheme()">Light</button>
-      <button class="control-btn" onclick="toggleLanguage()">PT</button>
+      <button id="theme-btn" class="control-btn" onclick="toggleTheme()">Light</button>
+<button id="lang-btn" class="control-btn" onclick="toggleLanguage()">PT</button>
+
     </div>
   </div>
 </nav>
@@ -1592,110 +1594,122 @@
       ]
     };
 
+  /* =========================
+     ESTADO GLOBAL
+  ========================== */
   let currentLang = 'en';
-    let isLightMode = false;
+  let isLightMode = false;
 
-    // Toggle Theme
-    function toggleTheme() {
-      isLightMode = !isLightMode;
-      document.body.classList.toggle('light-mode', isLightMode);
-      document.getElementById('theme-btn').textContent = isLightMode ? (currentLang === 'en' ? 'Dark' : 'Escuro') : (currentLang === 'en' ? 'Light' : 'Claro');
+  const themeBtn = document.getElementById('theme-btn');
+  const langBtn  = document.getElementById('lang-btn');
+
+  /* =========================
+     THEME
+  ========================== */
+  function updateThemeButton() {
+    if (isLightMode) {
+      themeBtn.textContent = currentLang === 'en' ? 'Dark' : 'Escuro';
+    } else {
+      themeBtn.textContent = currentLang === 'en' ? 'Light' : 'Claro';
     }
+  }
 
-    // Show Page
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-      document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
-      
-      document.getElementById(`page-${pageId}`).classList.add('active');
-      document.getElementById(`nav-${pageId}`).classList.add('active');
-      
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  function toggleTheme() {
+    isLightMode = !isLightMode;
+    document.body.classList.toggle('light-mode', isLightMode);
+    updateThemeButton();
+  }
 
-    // Modal Functions
-    function openModal(index) {
-      const service = servicesData[currentLang][index];
-      document.getElementById('modal-number').textContent = service.number;
-      document.getElementById('modal-title').textContent = service.title;
-      document.getElementById('modal-description').textContent = service.description;
-      
-      const list = document.getElementById('modal-list');
-      list.innerHTML = service.details.map(detail => 
-        `<li><span class="detail-marker">→</span>${detail}</li>`
-      ).join('');
-      
-      document.getElementById('modal-overlay').classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
+  /* =========================
+     LANGUAGE
+  ========================== */
+  function updateLanguageButton() {
+    langBtn.textContent = currentLang === 'en' ? 'PT' : 'EN';
+  }
 
-    function closeModal(event) {
-      if (event && event.target !== event.currentTarget) return;
-      document.getElementById('modal-overlay').classList.remove('active');
-      document.body.style.overflow = '';
-    }
+  function toggleLanguage() {
+    currentLang = currentLang === 'en' ? 'pt' : 'en';
 
-    // Close modal with Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const text = el.getAttribute(`data-${currentLang}`);
+      if (text) el.innerHTML = text; // innerHTML por causa do <br>
     });
 
-    const cursorLight = document.querySelector('.cursor-light');
+    updateLanguageButton();
+    updateThemeButton(); // 🔥 mantém o texto do tema coerente
+  }
 
-document.addEventListener('mousemove', (e) => {
-  cursorLight.style.left = `${e.clientX}px`;
-  cursorLight.style.top = `${e.clientY}px`;
-});
+  /* =========================
+     PAGE NAVIGATION
+  ========================== */
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page-${pageId}`).classList.add('active');
 
-function toggleLanguage() {
-  currentLang = currentLang === 'en' ? 'pt' : 'en';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-  document.querySelectorAll('[data-en]').forEach(el => {
-    const text = el.getAttribute(`data-${currentLang}`);
-    if (text) {
-      el.innerHTML = text; // IMPORTANTE: innerHTML por causa do <br>
-    }
+  /* =========================
+     MODAL
+  ========================== */
+  function openModal(index) {
+    const service = servicesData[currentLang][index];
+
+    document.getElementById('modal-number').textContent = service.number;
+    document.getElementById('modal-title').textContent = service.title;
+    document.getElementById('modal-description').textContent = service.description;
+
+    const list = document.getElementById('modal-list');
+    list.innerHTML = service.details
+      .map(d => `<li><span class="detail-marker">→</span>${d}</li>`)
+      .join('');
+
+    document.getElementById('modal-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(e) {
+    if (e && e.target !== e.currentTarget) return;
+    document.getElementById('modal-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
   });
 
-  // Atualiza texto do botão
-  const langBtn = document.querySelector('.controls .control-btn:last-child');
-  langBtn.textContent = currentLang === 'en' ? 'PT' : 'EN';
-}
+  /* =========================
+     CURSOR LIGHT
+  ========================== */
+  const cursorLight = document.querySelector('.cursor-light');
 
+  document.addEventListener('mousemove', e => {
+    cursorLight.style.left = `${e.clientX}px`;
+    cursorLight.style.top  = `${e.clientY}px`;
+  });
+
+  /* =========================
+     NAV / MENU MOBILE
+  ========================== */
   const nav = document.getElementById('main-nav');
   const menuToggle = document.querySelector('.menu-toggle');
   const navMenu = document.querySelector('.nav-menu');
 
-  let lastScrollY = window.scrollY;
   let menuOpen = false;
 
-  /* ===== MENU MOBILE ===== */
   menuToggle.addEventListener('click', () => {
     menuOpen = !menuOpen;
-
     menuToggle.classList.toggle('active');
     navMenu.classList.toggle('active');
 
-    if (menuOpen) {
-      nav.classList.remove('island');
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
   });
 
-  /* ===== SCROLL → DYNAMIC ISLAND ===== */
   window.addEventListener('scroll', () => {
-    if (menuOpen) return; // se menu aberto, ignora scroll
-
-    if (window.scrollY > 120) {
-      nav.classList.add('island');
-    } else {
-      nav.classList.remove('island');
-    }
+    if (menuOpen) return;
+    nav.classList.toggle('island', window.scrollY > 120);
   });
 
-  /* ===== FECHAR MENU AO CLICAR EM LINK ===== */
   document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
       if (!menuOpen) return;
@@ -1706,6 +1720,12 @@ function toggleLanguage() {
       document.body.style.overflow = '';
     });
   });
+
+  /* =========================
+     INIT
+  ========================== */
+  updateThemeButton();
+  updateLanguageButton();
 
 
   </script>
