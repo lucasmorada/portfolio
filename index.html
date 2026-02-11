@@ -1592,155 +1592,120 @@
       ]
     };
 
-    /* =====================
-   ESTADOS GLOBAIS
-===================== */
-let currentLang = 'en';
-let isLightMode = false;
-let menuOpen = false;
-let lastScrollY = window.scrollY;
+  let currentLang = 'en';
+    let isLightMode = false;
 
-/* =====================
-   THEME
-===================== */
-function toggleTheme() {
-  isLightMode = !isLightMode;
-  document.body.classList.toggle('light-mode', isLightMode);
-  updateControlButtons();
-}
+    // Toggle Theme
+    function toggleTheme() {
+      isLightMode = !isLightMode;
+      document.body.classList.toggle('light-mode', isLightMode);
+      document.getElementById('theme-btn').textContent = isLightMode ? (currentLang === 'en' ? 'Dark' : 'Escuro') : (currentLang === 'en' ? 'Light' : 'Claro');
+    }
 
-/* =====================
-   PAGE NAVIGATION
-===================== */
-function showPage(pageId) {
-  document.querySelectorAll('.page').forEach(page =>
-    page.classList.remove('active')
-  );
+    // Show Page
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+      
+      document.getElementById(`page-${pageId}`).classList.add('active');
+      document.getElementById(`nav-${pageId}`).classList.add('active');
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-  document.querySelectorAll('.nav-links a').forEach(link =>
-    link.classList.remove('active')
-  );
+    // Modal Functions
+    function openModal(index) {
+      const service = servicesData[currentLang][index];
+      document.getElementById('modal-number').textContent = service.number;
+      document.getElementById('modal-title').textContent = service.title;
+      document.getElementById('modal-description').textContent = service.description;
+      
+      const list = document.getElementById('modal-list');
+      list.innerHTML = service.details.map(detail => 
+        `<li><span class="detail-marker">→</span>${detail}</li>`
+      ).join('');
+      
+      document.getElementById('modal-overlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
 
-  const page = document.getElementById(`page-${pageId}`);
-  const navLink = document.getElementById(`nav-${pageId}`);
+    function closeModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('modal-overlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
 
-  if (page) page.classList.add('active');
-  if (navLink) navLink.classList.add('active');
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+    const cursorLight = document.querySelector('.cursor-light');
 
-  // Fecha menu mobile ao navegar
-  closeMobileMenu();
-}
-
-/* =====================
-   MODAL
-===================== */
-function openModal(index) {
-  const service = servicesData?.[currentLang]?.[index];
-  if (!service) return;
-
-  document.getElementById('modal-number').textContent = service.number;
-  document.getElementById('modal-title').textContent = service.title;
-  document.getElementById('modal-description').textContent = service.description;
-
-  const list = document.getElementById('modal-list');
-  list.innerHTML = service.details
-    .map(detail => `<li><span class="detail-marker">→</span>${detail}</li>`)
-    .join('');
-
-  document.getElementById('modal-overlay').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal(e) {
-  if (e && e.target !== e.currentTarget) return;
-  document.getElementById('modal-overlay').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
+document.addEventListener('mousemove', (e) => {
+  cursorLight.style.left = `${e.clientX}px`;
+  cursorLight.style.top = `${e.clientY}px`;
 });
 
-/* =====================
-   CURSOR LIGHT
-===================== */
-const cursorLight = document.querySelector('.cursor-light');
+function toggleLanguage() {
+  currentLang = currentLang === 'en' ? 'pt' : 'en';
 
-if (cursorLight) {
-  document.addEventListener('mousemove', e => {
-    cursorLight.style.left = `${e.clientX}px`;
-    cursorLight.style.top = `${e.clientY}px`;
-  });
-}
-
-/* =====================
-   CONTROLS (LANG + THEME)
-===================== */
-function updateControlButtons() {
-  // Tema
-  document.querySelectorAll('[data-theme-btn]').forEach(btn => {
-    btn.textContent = isLightMode
-      ? currentLang === 'en' ? 'Dark' : 'Escuro'
-      : currentLang === 'en' ? 'Light' : 'Claro';
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const text = el.getAttribute(`data-${currentLang}`);
+    if (text) {
+      el.innerHTML = text; // IMPORTANTE: innerHTML por causa do <br>
+    }
   });
 
-  // Idioma
-  document.querySelectorAll('[data-lang-btn]').forEach(btn => {
-    btn.textContent = currentLang === 'en' ? 'PT' : 'EN';
+  // Atualiza texto do botão
+  const langBtn = document.querySelector('.controls .control-btn:last-child');
+  langBtn.textContent = currentLang === 'en' ? 'PT' : 'EN';
+}
+
+  const nav = document.getElementById('main-nav');
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navMenu = document.querySelector('.nav-menu');
+
+  let lastScrollY = window.scrollY;
+  let menuOpen = false;
+
+  /* ===== MENU MOBILE ===== */
+  menuToggle.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+
+    menuToggle.classList.toggle('active');
+    navMenu.classList.toggle('active');
+
+    if (menuOpen) {
+      nav.classList.remove('island');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
   });
-}
 
-/* =====================
-   NAV / DYNAMIC ISLAND
-===================== */
-const nav = document.getElementById('main-nav');
-const menuToggle = document.querySelector('.menu-toggle');
-const navMenu = document.querySelector('.nav-menu');
+  /* ===== SCROLL → DYNAMIC ISLAND ===== */
+  window.addEventListener('scroll', () => {
+    if (menuOpen) return; // se menu aberto, ignora scroll
 
-/* MENU MOBILE */
-function closeMobileMenu() {
-  menuOpen = false;
-  menuToggle?.classList.remove('active');
-  navMenu?.classList.remove('active');
-  document.body.style.overflow = '';
-}
+    if (window.scrollY > 120) {
+      nav.classList.add('island');
+    } else {
+      nav.classList.remove('island');
+    }
+  });
 
-menuToggle?.addEventListener('click', () => {
-  menuOpen = !menuOpen;
+  /* ===== FECHAR MENU AO CLICAR EM LINK ===== */
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (!menuOpen) return;
 
-  menuToggle.classList.toggle('active', menuOpen);
-  navMenu.classList.toggle('active', menuOpen);
-
-  if (menuOpen) {
-    nav.classList.remove('island');
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = '';
-  }
-});
-
-/* SCROLL → DYNAMIC ISLAND */
-window.addEventListener('scroll', () => {
-  if (menuOpen) return;
-
-  if (window.scrollY > 120) {
-    nav.classList.add('island');
-  } else {
-    nav.classList.remove('island');
-  }
-});
-
-/* FECHAR MENU AO CLICAR EM LINK */
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', closeMobileMenu);
-});
-
-/* =====================
-   INIT
-===================== */
-updateControlButtons();
+      menuOpen = false;
+      menuToggle.classList.remove('active');
+      navMenu.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
 
 
   </script>
