@@ -1089,6 +1089,25 @@
   }
 }
 
+.mobile-close {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 28px;
+  cursor: pointer;
+  transition: transform 0.3s var(--transition), opacity 0.3s;
+  z-index: 10001;
+}
+
+.mobile-close:hover {
+  transform: rotate(90deg);
+  opacity: 0.6;
+}
+
+
   </style>
 </head>
 <body>
@@ -1122,6 +1141,7 @@
 
   <!-- MENU MOBILE -->
   <div class="nav-menu">
+    <button class="mobile-close" aria-label="Close menu" onclick="closeMobileMenu()">✕</button>
     <div class="nav-links">
       <a onclick="showPage('home')">HOME</a>
       <a onclick="showPage('works')">WORK</a>
@@ -1632,11 +1652,11 @@
 
     document.querySelectorAll('[data-en]').forEach(el => {
       const text = el.getAttribute(`data-${currentLang}`);
-      if (text) el.innerHTML = text; // innerHTML por causa do <br>
+      if (text) el.innerHTML = text; 
     });
 
     updateLanguageButton();
-    updateThemeButton(); // 🔥 mantém o texto do tema coerente
+    updateThemeButton(); 
   }
 
   /* =========================
@@ -1720,6 +1740,12 @@
       document.body.style.overflow = '';
     });
   });
+
+  function closeMobileMenu() {
+  document.querySelector('.nav-menu').classList.remove('active');
+  document.querySelector('.menu-toggle').classList.remove('active');
+}
+
 
   /* =========================
      INIT
