@@ -615,9 +615,17 @@
     .contact-item a {
       font-size: 24px;
       color: var(--text);
-      text-decoration: none;
+
       transition: opacity 0.3s;
     }
+
+    .contact-item a,
+.contact-item a:visited,
+.contact-item a:focus,
+.contact-item a:active {
+  text-decoration: none;
+  color: var(--text);
+}
 
     .contact-item a:hover {
       opacity: 0.5;
