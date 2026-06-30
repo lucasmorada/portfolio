@@ -15,15 +15,16 @@
     }
 
     html,
-    body {
-      width: 100%;
-      min-height: 100%;
-      margin: 0;
-      overflow: hidden;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: "Arial Black", Impact, system-ui, sans-serif;
-    }
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Arial Black", Impact, system-ui, sans-serif;
+}
 
     body {
       cursor: crosshair;
