@@ -111,3 +111,26 @@ factoryRevealItems.forEach((item) => {
   item.style.opacity = "0";
   factoryObserver.observe(item);
 });
+
+
+
+
+const glassOrbitStage = document.querySelector("#glassOrbitStage");
+
+if (glassOrbitStage) {
+  glassOrbitStage.addEventListener("mousemove", (event) => {
+    const rect = glassOrbitStage.getBoundingClientRect();
+
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+    glassOrbitStage.style.transform = `
+      rotateX(${y * -5}deg)
+      rotateY(${x * 7}deg)
+    `;
+  });
+
+  glassOrbitStage.addEventListener("mouseleave", () => {
+    glassOrbitStage.style.transform = "rotateX(0deg) rotateY(0deg)";
+  });
+}
