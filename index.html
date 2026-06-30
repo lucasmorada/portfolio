@@ -8,7 +8,8 @@
   
 </head>
 <body>
-  <main class="stage" id="stage" aria-label="Capa interativa do portfólio de Lucas Dias">
+  <main>
+  <section class="stage" id="stage" aria-label="Capa interativa do portfólio de Lucas Dias">
     <div class="grain"></div>
     <div class="scan"></div>
 
@@ -78,24 +79,26 @@ PRECISION MODE .......... ENABLED</div>
     </section>
 
     <section class="tag-layer" id="tagLayer" aria-hidden="true">
-      <svg class="tag-svg" viewBox="0 0 1280 360" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <filter id="rough">
-            <feTurbulence type="fractalNoise" baseFrequency="0.018 0.095" numOctaves="3" seed="9" />
-            <feDisplacementMap in="SourceGraphic" scale="7" />
-          </filter>
-          <filter id="rough2">
-            <feTurbulence type="fractalNoise" baseFrequency="0.032 0.13" numOctaves="2" seed="12" />
-            <feDisplacementMap in="SourceGraphic" scale="4" />
-          </filter>
-        </defs>
-        <path class="understroke" d="M95 256 C 255 310, 500 278, 678 276 S 1010 285, 1190 218" />
-        <text class="tag-ghost" x="76" y="245">WebDev</text>
-        <text class="tag-main" x="64" y="248">WebDev</text>
-      </svg>
-    </section>
+  <svg class="tag-svg" viewBox="0 0 1280 360" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <filter id="rough">
+        <feTurbulence type="fractalNoise" baseFrequency="0.018 0.095" numOctaves="3" seed="9" />
+        <feDisplacementMap in="SourceGraphic" scale="7" />
+      </filter>
+      <filter id="rough2">
+        <feTurbulence type="fractalNoise" baseFrequency="0.032 0.13" numOctaves="2" seed="12" />
+        <feDisplacementMap in="SourceGraphic" scale="4" />
+      </filter>
+    </defs>
+    <path class="understroke" d="M95 256 C 255 310, 500 278, 678 276 S 1010 285, 1190 218" />
+    <text class="tag-ghost" x="76" y="245">WebDev</text>
+    <text class="tag-main" x="64" y="248">WebDev</text>
+  </svg>
+</section>
 
-  <section class="factory-addon" id="factory">
+</section>
+
+<section class="factory-addon" id="factory">
 
   <div class="factory-addon-left">
     <div class="factory-step active">
