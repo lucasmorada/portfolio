@@ -49,3 +49,65 @@
     }
 
     animate();
+
+
+
+
+
+    const factorySection = document.querySelector(".factory-addon");
+const factoryParallaxItems = document.querySelectorAll("[data-factory-depth]");
+
+let factoryMouseX = 0;
+let factoryMouseY = 0;
+
+if (factorySection) {
+  factorySection.addEventListener("mousemove", (event) => {
+    const rect = factorySection.getBoundingClientRect();
+
+    factoryMouseX = (event.clientX - rect.left) / rect.width - 0.5;
+    factoryMouseY = (event.clientY - rect.top) / rect.height - 0.5;
+
+    factoryParallaxItems.forEach((item) => {
+      const depth = Number(item.dataset.factoryDepth || 0.1);
+      const moveX = factoryMouseX * depth * 180;
+      const moveY = factoryMouseY * depth * 180;
+      const rotate = factoryMouseX * depth * 40;
+
+      item.style.transform = `
+        translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))
+        rotate(${rotate}deg)
+      `;
+    });
+  });
+}
+
+const factoryRevealItems = document.querySelectorAll(
+  ".factory-step, .factory-terminal, .skills-production-grid article"
+);
+
+const factoryObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+
+    entry.target.animate(
+      [
+        { opacity: 0, transform: "translateY(36px)" },
+        { opacity: 1, transform: "translateY(0)" }
+      ],
+      {
+        duration: 700,
+        easing: "cubic-bezier(.2,.8,.2,1)",
+        fill: "forwards"
+      }
+    );
+
+    factoryObserver.unobserve(entry.target);
+  });
+}, {
+  threshold: 0.14
+});
+
+factoryRevealItems.forEach((item) => {
+  item.style.opacity = "0";
+  factoryObserver.observe(item);
+});
