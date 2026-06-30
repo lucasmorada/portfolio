@@ -527,7 +527,10 @@ main {
     }
 
     @media (max-width: 640px) {
-      body { overflow: hidden; }
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
       .stage { min-height: 100svh; }
       .frame { inset: 18px; }
       .headline-wrap { top: 48%; }
@@ -1029,4 +1032,40 @@ main {
   .skills-production-grid article:last-child {
     border-bottom: none;
   }
+}
+
+
+html,
+body {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+body {
+  position: static !important;
+}
+
+main {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
+}
+
+.stage {
+  position: relative !important;
+  width: 100% !important;
+  height: 100vh !important;
+  min-height: 720px !important;
+  overflow: hidden !important;
+}
+
+.factory-addon,
+.skills-production {
+  position: relative !important;
+  width: 100% !important;
+  z-index: 1 !important;
 }
